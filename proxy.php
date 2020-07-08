@@ -1,6 +1,6 @@
 <?php
 // PHP Proxy File for CasterStats(r)
-// (c) Copyright 2017 NeuroMedia Software SPRL
+// (c) Copyright 2020 NeuroMedia Software SPRL
 
 // Instructions
 
@@ -10,6 +10,21 @@
 // For SHOUTcast 1
 // RewriteCond %{QUERY_STRING} (^|&)mode=viewxml($|&)
 // RewriteRule ^admin\.cgi$ /proxy.php?&%{QUERY_STRING}
+
+// (optional) Uncomment and fill the following values if you want to enable authentication on the proxy
+// To later access the proxy, include the following value at the end of your url :
+// ?username=admin&password=yourpass (replace "admin" and "yourpass" with the values you entered below)
+
+//$proxy_username = 'admin';
+//$proxy_password = 'yourpass';
+
+if (!empty($proxy_username) && !empty($proxy_password)) {
+	if (!isset($_GET["username"]) || !isset($_GET["password"]) ||
+	$_GET["username"] != $proxy_username || $_GET["password"] != $proxy_password) {
+		header('HTTP/1.0 401 Unauthorized');
+		exit;
+	}
+}
 
 header("Content-Type: text/xml");
 
